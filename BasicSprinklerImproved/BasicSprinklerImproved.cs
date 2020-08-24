@@ -9,6 +9,8 @@ using StardewModdingAPI.Events;
 using StardewModdingAPI.Utilities;
 using StardewValley;
 using StardewValley.TerrainFeatures;
+using StardewValley.Locations;
+
 
 namespace BasicSprinklerImproved
 {
@@ -409,7 +411,7 @@ namespace BasicSprinklerImproved
             Monitor.Log("Finding and acting on all sprinklers...");
 
             //Act on all found sprinklers in all locations
-            foreach (GameLocation location in Game1.locations)
+            foreach (GameLocation location in GetAllGameLocations())
             {
                 foreach (StardewValley.Object obj in location.objects.Values)
                 {
@@ -562,5 +564,17 @@ namespace BasicSprinklerImproved
         //    //Go west
         //    ChangeWaterState(location, w1, iY, desiredState);
         //}
+
+        /// <summary>Get all game locations.</summary>
+        public static IEnumerable<GameLocation> GetAllGameLocations()
+        {
+            return Game1.locations
+                .Concat(
+                    from location in Game1.locations.OfType<BuildableGameLocation>()
+                    from building in location.buildings
+                    where building.indoors.Value != null
+                    select building.indoors.Value
+                );
+        }
     }
 }
