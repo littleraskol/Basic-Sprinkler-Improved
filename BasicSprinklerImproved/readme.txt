@@ -1,25 +1,15 @@
-﻿This readme focuses on using the config.json file. Note that you do not have to do anything with this because the mod will generate a default config file with the "horizontal" spray pattern.
+﻿# Basic-Sprinkler-Improved
+ Stardew Valley mod to improve functionality of basic sprinkler.
 
-1. THE EXAMPLE CONFIG
+1. INTRODUCTION
 
-In the mod package is a file called "config-example-CHANGE-ME.json" which you can use as your initial config file. It contains the following:
+Basic Sprinkler Improved changes the way the basic sprinkler works without making it cover any more area than it does in the base game. I always found the most annoying thing about it to be the shape, which was just useless. But while there are a number of fine mods out there that change the way the sprinkler works, they all make it cover more total area, which seemed a bit overpowered to me. So I made this for my personal use.
 
-{
-  "_comment":  "Remove this line and change the file name to config.json, see readme.txt for usage instructions.",
-  "patternType": "horizontal",
-  "northArea": 0,
-  "southArea": 0,
-  "eastArea": 2,
-  "westArea": 2
-}
+It's hoped that in addition to making the basic sprinkler more useful, the different patterns one can make with them will give them a niche so they can still be useful even when you get improved sprinklers.
 
-With the exception of the "_comment" key, this is identical to the default conifg.json the mod will generate. To use this file, completely remove the line with "_comment" so that "patternType" is the first entry in the brackets, then rename the file to "config.json"
+2. CONFIGURATION
 
-It can be used as it after that point, or modified according to these instructions.
-
-2. CONFIGURATION INSTRUCTIONS
-
-The mod works by watering tiles according to one of the following configurations. (The X represents the sprinkler and the Os the tiles it waters while each * represents an unwatered tile.)
+The mod works by watering tiles according to one of the following configurations. (The X represents the sprinkler and the Os the tiles it waters while each * represents an unwatered tile.) These configurations are set in the file config.json
 
 horizontal: 
 
@@ -92,3 +82,50 @@ The sprinkler will produce this pattern:
 If you don't set the "patternType" to "custom" then the numbers will be ignored entirely.
 
 Changes to config.json will only take effect after restarting the game.
+
+3. KNOWN ISSUES
+
+*Can't do anything with the sprinkler's animation to make it match how it actually works, I'm afraid.
+*There is a possibility that a basic sprinkler may "unwater" parts of the pattern of another kind of sprinkler. I plan on fixing this eventually, but for now, as a workaround, don't put basic sprinklers within or adjacent to the watering area of an improved or iridium sprinkler.
+
+4. FUTURE PLANS
+
+*Depending on how crazy I get I might want to make in-game config menus or something. Probably not though.
+*Something I would like to do is make it more dynamic in handling config changes. Currently, it only applies changes when you restart the game.
+
+5. CREDITS
+
+I'll admit that I studied closely the work of OrSpeeder (maker of Configurable Improved Sprinklers) and ADoby (maker of Simple Sprinkler). The method overall is my own but without their pioneering work, I probably wouldn't have been able to make heads or tales of anything. If you want a different take on changing up how sprinklers work, definitely check them out.
+
+Configurable Improved Sprinklers: http://community.playstarbound.com/threads/configurable-improved-sprinklers-scarecrow-and-sprinklers-area-highlights.112443/
+Simple Sprinkler: http://community.playstarbound.com/threads/smapi-simple-sprinkler.110326/
+
+6. LICENSE
+
+Basic Sprinkler Improved is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+For information on this license, see: <http://www.gnu.org/licenses/>
+
+Basic Sprinkler Improved mod is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+7. CHANGE LOG
+
+Version 2.0.0 (8/??/20)
+-Version to 2.0 (new API).
+-Including default config file.
+-Update keys added to manifest.
+-Locations logic updated to include indoor and outdoor locations in search.
+
+Version 1.0.? (6/12/17)
+-Removed deprecated function, replaced with new function.
+
+Version 1.0.1 (3/5/17)
+-Fixes an issue where modified basic sprinklers were un-watering other basic sprinklers' watering areas. Note that there may still be an issue with a basic sprinkler un-watering parts of the pattern of another kind of sprinkler. I plan on fixing this eventually, but for now, as a workaround, don't put basic sprinklers within or adjacent to the watering area of an improved or iridium sprinkler.
+
+Version 1.0.0 (1/18/17)
+-Now handles rainfall correctly, whether scheduled or forced by totem.
+-Mod will now more robustly support changes in configuration.
+-Fixed an issue with "mirroring" the north and south directions.
+
+
+

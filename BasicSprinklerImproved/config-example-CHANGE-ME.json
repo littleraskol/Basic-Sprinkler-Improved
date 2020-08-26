@@ -1,8 +1,0 @@
-{
-  "_comment":  "Remove this line and change the file name to config.json, see readme.txt for usage instructions.",
-  "patternType": "horizontal",
-  "northArea": 0,
-  "southArea": 0,
-  "eastArea": 2,
-  "westArea": 2
-}

@@ -9,7 +9,7 @@ It's hoped that in addition to making the basic sprinkler more useful, the diffe
 
 2. CONFIGURATION
 
-The mod works by watering tiles according to one of the following configurations. (The X represents the sprinkler and the Os the tiles it waters while each * represents an unwatered tile.)
+The mod works by watering tiles according to one of the following configurations. (The X represents the sprinkler and the Os the tiles it waters while each * represents an unwatered tile.) These configurations are set in the file config.json
 
 horizontal: 
 
@@ -107,4 +107,25 @@ Basic Sprinkler Improved is free software: you can redistribute it and/or modify
 For information on this license, see: <http://www.gnu.org/licenses/>
 
 Basic Sprinkler Improved mod is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+7. CHANGE LOG
+
+Version 2.0.0 (8/??/20)
+-Version to 2.0 (new API).
+-Including default config file.
+-Update keys added to manifest.
+-Locations logic updated to include indoor and outdoor locations in search.
+
+Version 1.0.? (6/12/17)
+-Removed deprecated function, replaced with new function.
+
+Version 1.0.1 (3/5/17)
+-Fixes an issue where modified basic sprinklers were un-watering other basic sprinklers' watering areas. Note that there may still be an issue with a basic sprinkler un-watering parts of the pattern of another kind of sprinkler. I plan on fixing this eventually, but for now, as a workaround, don't put basic sprinklers within or adjacent to the watering area of an improved or iridium sprinkler.
+
+Version 1.0.0 (1/18/17)
+-Now handles rainfall correctly, whether scheduled or forced by totem.
+-Mod will now more robustly support changes in configuration.
+-Fixed an issue with "mirroring" the north and south directions.
+
+
 
