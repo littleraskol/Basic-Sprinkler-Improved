@@ -298,7 +298,7 @@ namespace BasicSprinklerImproved
         {
             myConfig = null;
             WateringPattern result = null;
-            string loadedName = "";
+            string loadedName;
 
             //default config
             if (fileName == "")
@@ -350,24 +350,24 @@ namespace BasicSprinklerImproved
 
         //Every day, activate all sprinklers if not raining.
         void Event_WaterEachMorning(object sender, EventArgs e)
-        {
-            //hasWateredToday = false;
-
-            //Only water if it's not raining.
-            if (!(Game1.isRaining || Game1.isLightning))
-            {
-                Monitor.Log("Weather is right for sprinklers, will water per pattern = " + toWater.ToString());
-
-                myHelper.Events.Player.Warped += Event_DoWatering;
-            }
-            else
-            {
-                Monitor.Log("Raining today; skip sprinklers.");
-            }
-        }
-
-        //Institutes watering pattern.
-        void Event_DoWatering(object sender, EventArgs e)
+        //{
+        //    //hasWateredToday = false;
+        //
+        //    //Only water if it's not raining.
+        //    if (!(Game1.isRaining || Game1.isLightning))
+        //    {
+        //        Monitor.Log("Weather is right for sprinklers, will water per pattern = " + toWater.ToString());
+        //
+        //        myHelper.Events.Player.Warped += Event_DoWatering;
+        //    }
+        //    else
+        //    {
+        //        Monitor.Log("Raining today; skip sprinklers.");
+        //    }
+        //}
+        //
+        ////Institutes watering pattern.
+        //void Event_DoWatering(object sender, EventArgs e)
         {
             //Just give up if we're stuck with a default sprinkler due to pattern def error
             if (!noProb)
@@ -396,7 +396,7 @@ namespace BasicSprinklerImproved
             //Activate user-defined pattern
             LocateSprinklers(ActivateSprinkler);
 
-            myHelper.Events.Player.Warped -= Event_DoWatering;
+            //myHelper.Events.Player.Warped -= Event_DoWatering;
         }
 
         //Locate and act on all sprinklers.
@@ -413,11 +413,18 @@ namespace BasicSprinklerImproved
             //Act on all found sprinklers in all locations
             foreach (GameLocation location in GetAllGameLocations())
             {
-                foreach (StardewValley.Object obj in location.objects.Values)
+                bool shouldProceed = !(location.IsOutdoors && (Game1.isRaining || Game1.isLightning));
+                Monitor.Log($"Looking for sprinklers at '{location}' - Outdoors = {location.IsOutdoors}, Raining = {Game1.isRaining}, Storm = {Game1.isLightning}, Proceed = {shouldProceed}");
+                if (shouldProceed)
                 {
-                    if (obj.parentSheetIndex == sprinklerID)
+                    Monitor.Log($"Starting sprinkler search in '{location}'");
+                    foreach (StardewValley.Object obj in location.objects.Values)
                     {
-                        toDo(location, obj.tileLocation);
+                        if (obj.parentSheetIndex == sprinklerID)
+                        {
+                            Monitor.Log($"Found sprinkler in '{location}' at '{obj.tileLocation}'");
+                            toDo(location, obj.tileLocation);
+                        }
                     }
                 }
             }
