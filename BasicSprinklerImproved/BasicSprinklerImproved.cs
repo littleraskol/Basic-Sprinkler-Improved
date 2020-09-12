@@ -269,8 +269,7 @@ namespace BasicSprinklerImproved
             myHelper.Events.GameLoop.DayStarted += Event_WaterEachMorning;
             //LocationEvents.CurrentLocationChanged += Event_StopWorrying;
 
-            Monitor.Log("BasicSprinklerImproved: Entry complete & events registered.");
-
+            Monitor.Log("Basic Sprinkler Improved => Initialized", LogLevel.Info);
         }
 
         //Log some useful data output on game load using Monitor.Log("");
