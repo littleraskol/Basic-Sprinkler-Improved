@@ -5,7 +5,7 @@
 
 Basic Sprinkler Improved changes the way the basic sprinkler works without making it cover any more area than it does in the base game. I always found the most annoying thing about it to be the shape, which was just useless. But while there are a number of fine mods out there that change the way the sprinkler works, they all make it cover more total area, which seemed a bit overpowered to me. So I made this for my personal use.
 
-It's hoped that in addition to making the basic sprinkler more useful, the different patterns one can make with them will give them a niche so they can still be useful even when you get improved sprinklers.
+It's hoped that in addition to making the basic sprinkler more useful, the different patterns one can make with them will give them a niche so they can still be useful even when you get improved sprinklers. However, if I'm being honest, I'm kinda updating this for posterity and not for my own use. Because of the need to reconfigure the watering area rather than just adding to it, there's an "unwatering" step that seems daunting to do in a way that does not interfere with other watering devices. On the other hane there's a mod called "Line Sprinklers" that does more or less what I would want to do with this mod, and more. So give this a try, but know that there are other options out there.
 
 2. CONFIGURATION
 
@@ -66,17 +66,17 @@ The four items in the config.json called "northArea", "southArea", "eastArea", a
 For example, with this configuration:
 
 "patternType": "custom",
-"northArea": 1,
-"southArea": 1,
+"northArea": 2,
+"southArea": 0,
 "eastArea": 2,
 "westArea": 0
   
 The sprinkler will produce this pattern:
 
-*****
+**O**
 **O**
 **XOO
-**O**
+*****
 *****
 
 If you don't set the "patternType" to "custom" then the numbers will be ignored entirely.
@@ -86,7 +86,7 @@ Changes to config.json will only take effect after restarting the game.
 3. KNOWN ISSUES
 
 *Can't do anything with the sprinkler's animation to make it match how it actually works, I'm afraid.
-*There is a possibility that a basic sprinkler may "unwater" parts of the pattern of another kind of sprinkler. I plan on fixing this eventually, but for now, as a workaround, don't put basic sprinklers within or adjacent to the watering area of an improved or iridium sprinkler.
+*There is a possibility that a basic sprinkler may "unwater" parts of the pattern of another kind of sprinkler. Don't put basic sprinklers within or adjacent to the watering area of another sprinkler.
 
 4. FUTURE PLANS
 
@@ -95,7 +95,7 @@ Changes to config.json will only take effect after restarting the game.
 
 5. CREDITS
 
-I'll admit that I studied closely the work of OrSpeeder (maker of Configurable Improved Sprinklers) and ADoby (maker of Simple Sprinkler). The method overall is my own but without their pioneering work, I probably wouldn't have been able to make heads or tales of anything. If you want a different take on changing up how sprinklers work, definitely check them out.
+Based closely on work of OrSpeeder (maker of Configurable Improved Sprinklers) and ADoby (maker of Simple Sprinkler). The method overall is my own but without their pioneering work, I probably wouldn't have been able to make heads or tales of anything. If you want a different take on changing up how sprinklers work, definitely check them out.
 
 Configurable Improved Sprinklers: http://community.playstarbound.com/threads/configurable-improved-sprinklers-scarecrow-and-sprinklers-area-highlights.112443/
 Simple Sprinkler: http://community.playstarbound.com/threads/smapi-simple-sprinkler.110326/
@@ -110,11 +110,12 @@ Basic Sprinkler Improved mod is distributed in the hope that it will be useful, 
 
 7. CHANGE LOG
 
-Version 2.0.0 (8/??/20)
+Version 2.0.0 (8/13/20)
 -Version to 2.0 (new API).
 -Including default config file.
 -Update keys added to manifest.
 -Locations logic updated to include indoor and outdoor locations in search.
+-Distinguishes between outdoor and indoor areas to handle rain appropriately.
 
 Version 1.0.? (6/12/17)
 -Removed deprecated function, replaced with new function.
@@ -126,6 +127,3 @@ Version 1.0.0 (1/18/17)
 -Now handles rainfall correctly, whether scheduled or forced by totem.
 -Mod will now more robustly support changes in configuration.
 -Fixed an issue with "mirroring" the north and south directions.
-
-
-
