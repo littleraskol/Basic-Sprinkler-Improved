@@ -68,12 +68,12 @@ namespace BasicSprinklerImproved
 
             //Pattern types
             api.RegisterLabel(manifest, "Improved Basic Sprinkler Settings", "Settings page for mod.");
-            api.RegisterChoiceOption(manifest, "Watering Pattern", "Which watering pattern to use.", () => Instance.patternType, (string val) => Instance.patternType = val, WateringPattern.Instance.GetPatternTypes());
+            api.RegisterChoiceOption(manifest, "Watering Pattern", "Which watering pattern to use.", () => this.patternType, (string val) => this.patternType = val, WateringPattern.Instance.GetPatternTypes());
             api.RegisterLabel(manifest, "NOTE: Sum of values for custom pattern must not exceed 4.", "The improved basic sprinkler will have the same watering area as the default. Values entered here when custom pattern is selected will throw an error if they add up to more than 4. The game will use the default pattern.");
-            api.RegisterClampedOption(manifest, "Custom North Area", "How far north the sprinkler should water.", () => Instance.northArea, (int val) => Instance.northArea = val, 1, 4);
-            api.RegisterClampedOption(manifest, "Custom South Area", "How far south the sprinkler should water.", () => Instance.southArea, (int val) => Instance.southArea = val, 1, 4);
-            api.RegisterClampedOption(manifest, "Custom East Area", "How far east the sprinkler should water.", () => Instance.eastArea, (int val) => Instance.eastArea = val, 1, 4);
-            api.RegisterClampedOption(manifest, "Custom West Area", "How far west the sprinkler should water.", () => Instance.westArea, (int val) => Instance.westArea = val, 1, 4);
+            api.RegisterClampedOption(manifest, "Custom North Area", "How far north the sprinkler should water.", () => this.northArea, (int val) => this.northArea = val, 1, 4);
+            api.RegisterClampedOption(manifest, "Custom South Area", "How far south the sprinkler should water.", () => this.southArea, (int val) => this.southArea = val, 1, 4);
+            api.RegisterClampedOption(manifest, "Custom East Area", "How far east the sprinkler should water.", () => this.eastArea, (int val) => this.eastArea = val, 1, 4);
+            api.RegisterClampedOption(manifest, "Custom West Area", "How far west the sprinkler should water.", () => this.westArea, (int val) => this.westArea = val, 1, 4);
         }
     }
 }
