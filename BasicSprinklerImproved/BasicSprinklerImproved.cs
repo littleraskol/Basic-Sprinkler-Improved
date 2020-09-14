@@ -11,8 +11,6 @@ namespace BasicSprinklerImproved
 {
     class BasicSprinklerImproved : Mod
     {
-        internal static BasicSprinklerImproved Instance { get; private set; }
-
         int sprinklerID;            //ID# of sprinkler item. Could change for more advanced sprinklers or other objects.
         BasicSprinklerConfig myConfig;         //Basic config
 
@@ -32,7 +30,7 @@ namespace BasicSprinklerImproved
         {
             Monitor.Log("BasicSprinklerImproved: Entry made.");
 
-            Instance = this;
+            myHelper = helper;
 
             noProb = true;
 
@@ -41,17 +39,18 @@ namespace BasicSprinklerImproved
             LoadConfigsFromFile(backupFile, lastUsed);  //Keep track of last used pattern.
             LoadConfigsFromFile();                      //Load actual config.
 
-            myHelper = helper;
-
             myHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
-            myHelper.Events.GameLoop.DayStarted += Event_WaterEachMorning;
-            myHelper.Events.GameLoop.Saving += Event_SavePattern;
+            myHelper.Events.GameLoop.SaveLoaded += OnSaveLoaded;
+            myHelper.Events.GameLoop.DayStarted += WaterEachMorning;
+            myHelper.Events.GameLoop.Saving += SavePatterns;
 
             Monitor.Log("Basic Sprinkler Improved => Initialized", LogLevel.Info);
         }
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
+            noProb = true;
+
             if (myConfig != null)
             {
                 //See if we can find GMCM, quit if not.
@@ -70,13 +69,18 @@ namespace BasicSprinklerImproved
                 //Pattern types
                 api.RegisterLabel(ModManifest, "Improved Basic Sprinkler Settings", "Settings page for mod.");
                 api.RegisterChoiceOption(ModManifest, "Watering Pattern", "Which watering pattern to use.", () => myConfig.patternType, (string val) => myConfig.patternType = val, dp.GetPatternTypes());
-                api.RegisterLabel(ModManifest, "NOTE: Sum of values for custom pattern must not exceed 4.", "The improved basic sprinkler will have the same watering area as the default. Values entered here when custom pattern is selected will throw an error if they add up to more than 4. The game will use the default pattern.");
-                api.RegisterClampedOption(ModManifest, "Custom North Area", "How far north the sprinkler should water.", () => myConfig.northArea, (int val) => myConfig.northArea = val, 1, 4);
-                api.RegisterClampedOption(ModManifest, "Custom South Area", "How far south the sprinkler should water.", () => myConfig.southArea, (int val) => myConfig.southArea = val, 1, 4);
-                api.RegisterClampedOption(ModManifest, "Custom East Area", "How far east the sprinkler should water.", () => myConfig.eastArea, (int val) => myConfig.eastArea = val, 1, 4);
-                api.RegisterClampedOption(ModManifest, "Custom West Area", "How far west the sprinkler should water.", () => myConfig.westArea, (int val) => myConfig.westArea = val, 1, 4);
+                api.RegisterLabel(ModManifest, "Sum of custom values must not exceed 4.", "The improved basic sprinkler will have the same watering area as the default. Values entered here when custom pattern is selected will throw an error if they add up to more than 4. The game will use the default pattern.");
+                api.RegisterClampedOption(ModManifest, "Custom North Area", "How far north the sprinkler should water.", () => myConfig.northArea, (int val) => myConfig.northArea = val, 0, 4);
+                api.RegisterClampedOption(ModManifest, "Custom South Area", "How far south the sprinkler should water.", () => myConfig.southArea, (int val) => myConfig.southArea = val, 0, 4);
+                api.RegisterClampedOption(ModManifest, "Custom East Area", "How far east the sprinkler should water.", () => myConfig.eastArea, (int val) => myConfig.eastArea = val, 0, 4);
+                api.RegisterClampedOption(ModManifest, "Custom West Area", "How far west the sprinkler should water.", () => myConfig.westArea, (int val) => myConfig.westArea = val, 0, 4);
             }
             else Monitor.Log("Unable to setup menu due to configuration not being set properly.", LogLevel.Warn);
+        }
+
+        private void OnSaveLoaded(object sender, StardewModdingAPI.Events.SaveLoadedEventArgs e)
+        {
+            noProb = true;  //Kinda stumped as to how this sticks between game loads, hope this fixes it...
         }
 
         //Log some useful data output on game load using Monitor.Log("");
@@ -85,7 +89,7 @@ namespace BasicSprinklerImproved
             Monitor.Log("DAY-START DIAGNOSTICS BEGUN");
 
             //Was there a pattern load error?
-            if (!noProb) Monitor.Log($"Pattern load error occurred. Attempt = {toWater}");
+            if (!noProb) Monitor.Log($"Pattern load error occurred. Attempt = {toWater}", LogLevel.Warn);
 
             //Is there an old pattern known, and if so, what is it?
             if (lastUsed == null) Monitor.Log("No prior pattern known.");
@@ -156,7 +160,7 @@ namespace BasicSprinklerImproved
         }
 
         //Save last used pattern. The point here being that if the user changes the desired pattern, we need to undo the old pattern.
-        void Event_SavePattern(object sender, EventArgs e)
+        void SavePatterns(object sender, EventArgs e)
         {
             Monitor.Log("Saving current pattern.");
 
@@ -179,7 +183,7 @@ namespace BasicSprinklerImproved
         }
 
         //Every day, activate all sprinklers if not raining.
-        void Event_WaterEachMorning(object sender, EventArgs e)
+        void WaterEachMorning(object sender, EventArgs e)
         {
             //Just give up if we're stuck with a default sprinkler due to pattern def error
             if (!noProb)
