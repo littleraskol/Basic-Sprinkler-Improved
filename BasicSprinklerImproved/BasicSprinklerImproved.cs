@@ -81,6 +81,13 @@ namespace BasicSprinklerImproved
         {
             WateringPattern result;
 
+            if (config == null)
+            {
+                Monitor.Log($"Tried to load nonexistent config...", LogLevel.Error);
+                noProb = false;
+                return null;
+            }
+
             string type = config.patternType;
             int[] dims = new int[4] { config.northArea, config.southArea, config.eastArea, config.westArea };
             result = new WateringPattern(type, dims);
@@ -117,10 +124,11 @@ namespace BasicSprinklerImproved
                     Monitor.Log("Configuration loaded correctly.");
                     toSet = LoadPatternFromConfig(tempConfig);
 
-                    if (toSet == null) { Monitor.Log($"No pattern could be loaded from file: '{loadedName}'; may be saved & loaded later."); }
-                    else { Monitor.Log("Result = " + toSet.ToString()); }
+                    if (toSet == null) Monitor.Log($"No pattern could be loaded from file: '{loadedName}'; may be saved & loaded later.");
+                    else if (toSet.errorMsg != "") Monitor.Log($"Error in setting pattern: {toSet.errorMsg}");
+                    else Monitor.Log($"Result = {toSet}");
                 }
-                else Monitor.Log($"No config file to load: '{loadedName}' (Did you pass a valid config to set?)");
+                else Monitor.Log($"Could not load from file '{loadedName}', did you pass a valid pattern to set?");
             }
         }
 
