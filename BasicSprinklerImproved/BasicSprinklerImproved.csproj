@@ -68,7 +68,14 @@
     <Compile Include="BasicSprinklerImproved.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="GMCM.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="BasicSprinklerConfig.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WateringPattern.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="config.json">
