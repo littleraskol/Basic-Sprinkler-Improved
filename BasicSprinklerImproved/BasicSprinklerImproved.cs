@@ -18,6 +18,8 @@ namespace BasicSprinklerImproved
 
         //Name of backup file
         readonly string backupFile = "oldpattern.json";
+        //Name of config file
+        readonly string configFile = "config.json";
 
         WateringPattern toWater;    //Holds config-loaded data
         WateringPattern lastUsed;   //Pattern used previously
@@ -135,7 +137,12 @@ namespace BasicSprinklerImproved
         {
             Monitor.Log("Saving current pattern.");
 
-            if (lastUsed == null) { Monitor.Log("First time save."); }
+            Helper.Data.WriteJsonFile<BasicSprinklerConfig>(configFile, new BasicSprinklerConfig(toWater.myType, toWater.myPattern));
+
+            if (lastUsed == null) { 
+                Monitor.Log("First time save.");
+                Monitor.Log($"Current = {toWater}");
+            }
             else
             {
                 Monitor.Log($"Previous = {lastUsed}");
@@ -143,7 +150,7 @@ namespace BasicSprinklerImproved
             }
 
             lastUsed = toWater;
-            this.Helper.Data.WriteJsonFile<BasicSprinklerConfig>(backupFile, new BasicSprinklerConfig(lastUsed.myType, lastUsed.myPattern));
+            Helper.Data.WriteJsonFile<BasicSprinklerConfig>(backupFile, new BasicSprinklerConfig(lastUsed.myType, lastUsed.myPattern));
 
             Monitor.Log($"New pattern saved - {lastUsed}");
         }
