@@ -52,7 +52,28 @@ namespace BasicSprinklerImproved
 
         private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
         {
-            if (myConfig != null) myConfig.SetUpGMCM();
+            if (myConfig != null)
+            {
+                //See if we can find GMCM, quit if not.
+                var api = Helper.ModRegistry.GetApi<GenericModConfigMenu.GenericModConfigMenuAPI>("spacechase0.GenericModConfigMenu");
+
+                if (api == null)
+                {
+                    Monitor.Log("Unable to load GMCM API.", LogLevel.Info);
+                    return;
+                }
+
+                api.RegisterModConfig(ModManifest, () => myConfig = new BasicSprinklerConfig(), () => Helper.WriteConfig(myConfig));
+
+                //Pattern types
+                api.RegisterLabel(ModManifest, "Improved Basic Sprinkler Settings", "Settings page for mod.");
+                api.RegisterChoiceOption(ModManifest, "Watering Pattern", "Which watering pattern to use.", () => myConfig.patternType, (string val) => myConfig.patternType = val, WateringPattern.Instance.GetPatternTypes());
+                api.RegisterLabel(ModManifest, "NOTE: Sum of values for custom pattern must not exceed 4.", "The improved basic sprinkler will have the same watering area as the default. Values entered here when custom pattern is selected will throw an error if they add up to more than 4. The game will use the default pattern.");
+                api.RegisterClampedOption(ModManifest, "Custom North Area", "How far north the sprinkler should water.", () => myConfig.northArea, (int val) => myConfig.northArea = val, 1, 4);
+                api.RegisterClampedOption(ModManifest, "Custom South Area", "How far south the sprinkler should water.", () => myConfig.southArea, (int val) => myConfig.southArea = val, 1, 4);
+                api.RegisterClampedOption(ModManifest, "Custom East Area", "How far east the sprinkler should water.", () => myConfig.eastArea, (int val) => myConfig.eastArea = val, 1, 4);
+                api.RegisterClampedOption(ModManifest, "Custom West Area", "How far west the sprinkler should water.", () => myConfig.westArea, (int val) => myConfig.westArea = val, 1, 4);
+            }
             else Monitor.Log("Unable to setup menu due to configuration not being set properly.", LogLevel.Warn);
         }
 
@@ -137,7 +158,7 @@ namespace BasicSprinklerImproved
         {
             Monitor.Log("Saving current pattern.");
 
-            Helper.Data.WriteJsonFile<BasicSprinklerConfig>(configFile, new BasicSprinklerConfig(toWater.myType, toWater.myPattern));
+            //Helper.Data.WriteJsonFile<BasicSprinklerConfig>(configFile, new BasicSprinklerConfig(toWater.myType, toWater.myPattern));
 
             if (lastUsed == null) { 
                 Monitor.Log("First time save.");
