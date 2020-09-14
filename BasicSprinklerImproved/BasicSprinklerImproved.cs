@@ -11,6 +11,8 @@ namespace BasicSprinklerImproved
 {
     class BasicSprinklerImproved : Mod
     {
+        internal static BasicSprinklerImproved Instance { get; private set; }
+
         int sprinklerID;            //ID# of sprinkler item. Could change for more advanced sprinklers or other objects.
         BasicSprinklerConfig myConfig;         //Basic config
 
@@ -28,12 +30,14 @@ namespace BasicSprinklerImproved
         {
             Monitor.Log("BasicSprinklerImproved: Entry made.");
 
+            Instance = this;
+
             noProb = true;
 
             sprinklerID = 599;  //ID# of sprinkler object
 
-            lastUsed = LoadPatternFromConfigFile(backupFile);
-            toWater = LoadPatternFromConfigFile();
+            LoadConfigsFromFile(backupFile, lastUsed);  //Keep track of last used pattern.
+            LoadConfigsFromFile();                      //Load actual config.
 
             //If there was an error, things will still "work" but just like vanilla.
             if (toWater.errorMsg != "")
@@ -43,23 +47,21 @@ namespace BasicSprinklerImproved
                 noProb = false;
             }
 
-            //Not sure if we really need to bail out because of a problem in the old pattern...
-            //if (lastUsed.errorMsg != "")
-            //{
-            //    Monitor.Log("Error in prior pattern: " + lastUsed.errorMsg, LogLevel.Warn);
-            //    //Monitor.Log("Using normal pattern.", LogLevel.Warn);
-            //    //noProb = false;
-            //}
-
             DoDiagnostics();
 
             myHelper = helper;
 
-            myHelper.Events.GameLoop.Saving += Event_SavePattern;
+            myHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
             myHelper.Events.GameLoop.DayStarted += Event_WaterEachMorning;
-            //LocationEvents.CurrentLocationChanged += Event_StopWorrying;
+            myHelper.Events.GameLoop.Saving += Event_SavePattern;
 
             Monitor.Log("Basic Sprinkler Improved => Initialized", LogLevel.Info);
+        }
+
+        private void OnGameLaunched(object sender, StardewModdingAPI.Events.GameLaunchedEventArgs e)
+        {
+            if (myConfig != null) myConfig.SetUpGMCM();
+            else Monitor.Log("Unable to setup menu due to configuration not being set properly.", LogLevel.Warn);
         }
 
         //Log some useful data output on game load using Monitor.Log("");
@@ -82,41 +84,46 @@ namespace BasicSprinklerImproved
 
             Monitor.Log("GAME-LOAD DIAGNOSTICS COMPLETE");
         }
-
-        WateringPattern LoadPatternFromConfigFile(string fileName = "")
+        
+        WateringPattern LoadPatternFromConfig(BasicSprinklerConfig config)
         {
-            myConfig = null;
-            WateringPattern result = null;
+            WateringPattern result;
+
+            string type = config.patternType;
+            int[] dims = new int[4] { config.northArea, config.southArea, config.eastArea, config.westArea };
+            result = new WateringPattern(type, dims);
+
+            return result;
+        }
+
+        void LoadConfigsFromFile(string fileName = "", WateringPattern toSet = null)
+        {
+            BasicSprinklerConfig tempConfig;
             string loadedName;
 
-            //default config
+            //default config - what we're actually using.
             if (fileName == "")
             {
                 Monitor.Log("Loading pattern from default config file.");
                 myConfig = this.Helper.ReadConfig<BasicSprinklerConfig>();
-                loadedName = "config.json";
             }
             //custom file
             else
             {
-                Monitor.Log("Loading pattern from config file: '" + fileName + "'");
-                myConfig = this.Helper.Data.ReadJsonFile<BasicSprinklerConfig>(fileName);
+                Monitor.Log($"Loading pattern from config file: '{fileName}'");
+                tempConfig = this.Helper.Data.ReadJsonFile<BasicSprinklerConfig>(fileName);
                 loadedName = fileName;
+
+                if (tempConfig != null && toSet != null)
+                {
+                    Monitor.Log("Configuration loaded correctly.");
+                    toSet = LoadPatternFromConfig(tempConfig);
+
+                    if (toSet == null) { Monitor.Log($"No pattern could be loaded from file: '{loadedName}'; may be saved & loaded later."); }
+                    else { Monitor.Log("Result = " + toSet.ToString()); }
+                }
+                else Monitor.Log($"No config file to load: '{loadedName}' (Did you pass a valid config to set?)");
             }
-
-            if (myConfig != null)
-            {
-                Monitor.Log("Configuration loaded correctly.");
-                string type = myConfig.patternType;
-                int[] dims = new int[4] { myConfig.northArea, myConfig.southArea, myConfig.eastArea, myConfig.westArea };
-                result = new WateringPattern(type, dims);
-            }
-            else { Monitor.Log("No config file to load: '" + loadedName + "'"); }
-
-            if (result == null) { Monitor.Log("No pattern could be loaded from file: '" + loadedName + "'; may be saved & loaded later."); }
-            else { Monitor.Log("Result = " + result.ToString()); }
-
-            return result;
         }
 
         //Save last used pattern. The point here being that if the user changes the desired pattern, we need to undo the old pattern.
@@ -127,41 +134,30 @@ namespace BasicSprinklerImproved
             if (lastUsed == null) { Monitor.Log("First time save."); }
             else
             {
-                Monitor.Log("Previous = " + lastUsed.ToString());
-                Monitor.Log("New = " + toWater.ToString());
+                Monitor.Log($"Previous = {lastUsed}");
+                Monitor.Log($"New = {toWater}");
             }
 
             lastUsed = toWater;
             this.Helper.Data.WriteJsonFile<BasicSprinklerConfig>(backupFile, new BasicSprinklerConfig(lastUsed.myType, lastUsed.myPattern));
 
-            Monitor.Log("New pattern saved - " + lastUsed.ToString());
+            Monitor.Log($"New pattern saved - {lastUsed}");
         }
 
         //Every day, activate all sprinklers if not raining.
         void Event_WaterEachMorning(object sender, EventArgs e)
-        //{
-        //    //hasWateredToday = false;
-        //
-        //    //Only water if it's not raining.
-        //    if (!(Game1.isRaining || Game1.isLightning))
-        //    {
-        //        Monitor.Log("Weather is right for sprinklers, will water per pattern = " + toWater.ToString());
-        //
-        //        myHelper.Events.Player.Warped += Event_DoWatering;
-        //    }
-        //    else
-        //    {
-        //        Monitor.Log("Raining today; skip sprinklers.");
-        //    }
-        //}
-        //
-        ////Institutes watering pattern.
-        //void Event_DoWatering(object sender, EventArgs e)
         {
             //Just give up if we're stuck with a default sprinkler due to pattern def error
             if (!noProb)
             {
                 Monitor.Log("Had to quit watering due to a pattern definition issue, default pattern will be applied.", LogLevel.Warn);
+                return;
+            }
+
+            toWater = LoadPatternFromConfig(myConfig);
+            if (toWater == null)
+            {
+                Monitor.Log("Had to quit watering due inablity to load pattern to apply from config, default pattern will be applied.", LogLevel.Error);
                 return;
             }
 
