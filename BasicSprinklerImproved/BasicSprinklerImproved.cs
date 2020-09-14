@@ -39,14 +39,6 @@ namespace BasicSprinklerImproved
             LoadConfigsFromFile(backupFile, lastUsed);  //Keep track of last used pattern.
             LoadConfigsFromFile();                      //Load actual config.
 
-            //If there was an error, things will still "work" but just like vanilla.
-            if (toWater.errorMsg != "")
-            {
-                Monitor.Log("Error in current pattern: " + toWater.errorMsg, LogLevel.Warn);
-                Monitor.Log("Using normal pattern.", LogLevel.Warn);
-                noProb = false;
-            }
-
             DoDiagnostics();
 
             myHelper = helper;
@@ -92,6 +84,12 @@ namespace BasicSprinklerImproved
             string type = config.patternType;
             int[] dims = new int[4] { config.northArea, config.southArea, config.eastArea, config.westArea };
             result = new WateringPattern(type, dims);
+
+            if (result.errorMsg != "")
+            {
+                Monitor.Log($"Error in current pattern: {result.errorMsg}", LogLevel.Warn);
+                noProb = false;
+            }
 
             return result;
         }
