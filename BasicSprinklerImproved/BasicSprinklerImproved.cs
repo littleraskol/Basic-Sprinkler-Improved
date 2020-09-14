@@ -39,8 +39,6 @@ namespace BasicSprinklerImproved
             LoadConfigsFromFile(backupFile, lastUsed);  //Keep track of last used pattern.
             LoadConfigsFromFile();                      //Load actual config.
 
-            DoDiagnostics();
-
             myHelper = helper;
 
             myHelper.Events.GameLoop.GameLaunched += OnGameLaunched;
@@ -59,22 +57,22 @@ namespace BasicSprinklerImproved
         //Log some useful data output on game load using Monitor.Log("");
         void DoDiagnostics()
         {
-            Monitor.Log("GAME-LOAD DIAGNOSTICS BEGUN");
+            Monitor.Log("DAY-START DIAGNOSTICS BEGUN");
 
             //Was there a pattern load error?
-            if (!noProb) { Monitor.Log("Pattern load error occurred. Attempt = " + toWater.ToString()); }
+            if (!noProb) Monitor.Log($"Pattern load error occurred. Attempt = {toWater}");
 
             //Is there an old pattern known, and if so, what is it?
-            if (lastUsed == null) { Monitor.Log("No prior pattern known."); }
-            else { Monitor.Log("Prior pattern = " + lastUsed.ToString()); }
+            if (lastUsed == null) Monitor.Log("No prior pattern known.");
+            else Monitor.Log($"Prior pattern = {lastUsed}");
 
             //What is the current pattern?
-            Monitor.Log("Current pattern = " + toWater.ToString());
+            Monitor.Log($"Current pattern = {toWater}");
 
             //What item are we acting on?
-            Monitor.Log(String.Format("Using item ID#{0}", sprinklerID));
+            Monitor.Log($"Using item ID#{sprinklerID}");
 
-            Monitor.Log("GAME-LOAD DIAGNOSTICS COMPLETE");
+            Monitor.Log("DAY-START DIAGNOSTICS COMPLETE");
         }
         
         WateringPattern LoadPatternFromConfig(BasicSprinklerConfig config)
@@ -167,6 +165,8 @@ namespace BasicSprinklerImproved
                 return;
             }
 
+            DoDiagnostics();
+
             //Check to see if we should update the pattern: If the pattern has changed in the congfig, undo the last pattern.
             if (lastUsed != null && lastUsed.ToString() != toWater.ToString())
             {
@@ -205,15 +205,15 @@ namespace BasicSprinklerImproved
             foreach (GameLocation location in GetAllGameLocations())
             {
                 bool shouldProceed = !(location.IsOutdoors && (Game1.isRaining || Game1.isLightning));
-                Monitor.Log($"Looking for sprinklers at '{location}' - Outdoors = {location.IsOutdoors}, Raining = {Game1.isRaining}, Storm = {Game1.isLightning}, Proceed = {shouldProceed}");
+                //Monitor.Log($"Looking for sprinklers at '{location}' - Outdoors = {location.IsOutdoors}, Raining = {Game1.isRaining}, Storm = {Game1.isLightning}, Proceed = {shouldProceed}");
                 if (shouldProceed)
                 {
-                    Monitor.Log($"Starting sprinkler search in '{location}'");
+                    //Monitor.Log($"Starting sprinkler search in '{location}'");
                     foreach (StardewValley.Object obj in location.objects.Values)
                     {
                         if (obj.parentSheetIndex == sprinklerID)
                         {
-                            Monitor.Log($"Found sprinkler in '{location}' at '{obj.tileLocation}'");
+                            //Monitor.Log($"Found sprinkler in '{location}' at '{obj.tileLocation}'");
                             toDo(location, obj.tileLocation);
                         }
                     }
@@ -304,8 +304,8 @@ namespace BasicSprinklerImproved
         //walk through the sprinkler dimensions for a given pattern.
         void WalkThroughPattern(GameLocation location, int[] toUse, float X, float Y, int desiredState)
         {
-            Monitor.Log("Walkthrough begun.");
-            Monitor.Log(String.Format("Walking through pattern in " + location.ToString() + " at {0},{1}", X, Y));
+            //Monitor.Log("Walkthrough begun.");
+            //Monitor.Log(String.Format("Walking through pattern in " + location.ToString() + " at {0},{1}", X, Y));
 
             int i = 0;
             int j;
@@ -327,7 +327,7 @@ namespace BasicSprinklerImproved
                 }
                 i++;
             }
-            Monitor.Log("Walkthrough complete.");
+            //Monitor.Log("Walkthrough complete.");
         }
 
         //Change the watered state to the given value
