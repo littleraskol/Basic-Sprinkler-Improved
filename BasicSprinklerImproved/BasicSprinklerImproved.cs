@@ -19,7 +19,7 @@ namespace BasicSprinklerImproved
         //Name of backup file
         readonly string backupFile = "oldpattern.json";
         //Name of config file
-        readonly string configFile = "config.json";
+        //readonly string configFile = "config.json";
 
         WateringPattern toWater;    //Holds config-loaded data
         WateringPattern lastUsed;   //Pattern used previously
