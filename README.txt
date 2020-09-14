@@ -5,7 +5,9 @@
 
 Basic Sprinkler Improved changes the way the basic sprinkler works without making it cover any more area than it does in the base game. I always found the most annoying thing about it to be the shape, which was just useless. But while there are a number of fine mods out there that change the way the sprinkler works, they all make it cover more total area, which seemed a bit overpowered to me. So I made this for my personal use.
 
-It's hoped that in addition to making the basic sprinkler more useful, the different patterns one can make with them will give them a niche so they can still be useful even when you get improved sprinklers. However, if I'm being honest, I'm kinda updating this for posterity and not for my own use. Because of the need to reconfigure the watering area rather than just adding to it, there's an "unwatering" step that seems daunting to do in a way that does not interfere with other watering devices. On the other hane there's a mod called "Line Sprinklers" that does more or less what I would want to do with this mod, and more. So give this a try, but know that there are other options out there.
+It's hoped that in addition to making the basic sprinkler more useful, the different patterns one can make with them will give them a niche so they can still be useful even when you get improved sprinklers. However, if I'm being honest, I'm kinda updating this for posterity and not for my own use. Because of the need to reconfigure the watering area rather than just adding to it, there's an "unwatering" step that seems daunting to do in a way that does not interfere with other watering devices. On the other hand there's a mod called "Line Sprinklers" that does more or less what I would want to do with this mod, and more. So give this a try, but know that there are other options out there.
+
+Source code is included in the install package and available here: https://github.com/littleraskol/Basic-Sprinkler-Improved
 
 2. CONFIGURATION
 
