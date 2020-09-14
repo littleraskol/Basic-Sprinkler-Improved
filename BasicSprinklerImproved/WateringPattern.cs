@@ -7,8 +7,6 @@ namespace BasicSprinklerImproved
 {
     class WateringPattern
     {
-        internal static WateringPattern Instance { get; private set; }
-
         readonly int maxWateringArea = 4;    //Sanity checking for custom patterns.
 
         /*
@@ -160,7 +158,6 @@ namespace BasicSprinklerImproved
         //A default no-args constructor, works like vanilla.
         public WateringPattern()
         {
-            Instance = this;
             this.Init();
             myPattern = defaultPattern;
         }
@@ -168,8 +165,6 @@ namespace BasicSprinklerImproved
         //A "real" constructor that determines its type.
         public WateringPattern(string typeDef, int[] patternDef)
         {
-            Instance = this;
-
             //Just in case.
             myType = typeDef.ToLower();
 
