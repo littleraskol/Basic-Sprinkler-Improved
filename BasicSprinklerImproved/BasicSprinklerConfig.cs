@@ -32,6 +32,8 @@ namespace BasicSprinklerImproved
 
         public BasicSprinklerConfig()
         {
+            Instance = this;
+
             this.patternType = "horizontal";
 
             //Note: It doesn't actually matter what areas we're using with a default pattern. It will construct based on type. This just sets a good example.
@@ -43,6 +45,8 @@ namespace BasicSprinklerImproved
 
         public BasicSprinklerConfig(string type, int[] dims)
         {
+            Instance = this;
+
             this.patternType = type;
 
             this.northArea = dims[0];
