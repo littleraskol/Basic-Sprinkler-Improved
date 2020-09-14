@@ -11,6 +11,8 @@ Source code is included in the install package and available here: https://githu
 
 2. CONFIGURATION
 
+Note that while this section refers to the config file, you can change settings in game using the Generic Mod Config Menu (GMCM) interface.
+
 The mod works by watering tiles according to one of the following configurations. (The X represents the sprinkler and the Os the tiles it waters while each * represents an unwatered tile.) These configurations are set in the file config.json
 
 horizontal: 
@@ -92,8 +94,7 @@ Changes to config.json will only take effect after restarting the game.
 
 4. FUTURE PLANS
 
-*Depending on how crazy I get I might want to make in-game config menus or something. Probably not though.
-*Something I would like to do is make it more dynamic in handling config changes. Currently, it only applies changes when you restart the game.
+*Something I would like to do is make it more dynamic in handling config changes. Currently, it only applies changes when you restart the game or (with GMCM) when you exit to the title screen and change them.
 
 5. CREDITS
 
@@ -112,7 +113,10 @@ Basic Sprinkler Improved mod is distributed in the hope that it will be useful, 
 
 7. CHANGE LOG
 
-Version 2.0.0 (8/13/20)
+Version 2.1.0 (9/??/20)
+-Settings can now be changed in game using Generic Mod Config Menu.
+
+Version 2.0.0 (9/13/20)
 -Version to 2.0 (new API).
 -Including default config file.
 -Update keys added to manifest.
