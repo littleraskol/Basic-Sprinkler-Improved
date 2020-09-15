@@ -76,7 +76,6 @@ namespace BasicSprinklerImproved
             api.RegisterModConfig(ModManifest, () => myConfig = new BasicSprinklerConfig(), () => Helper.WriteConfig(myConfig));
 
             //Pattern types
-            api.RegisterLabel(ModManifest, "Improved Basic Sprinkler Settings", "Settings page for mod.");
             api.RegisterChoiceOption(ModManifest, "Watering Pattern", "Which watering pattern to use.", () => myConfig.patternType, (string val) => myConfig.patternType = val, pattypes);
             api.RegisterLabel(ModManifest, "Sum of custom values must not exceed 4.", "The improved basic sprinkler will have the same watering area as the default. Values entered here when custom pattern is selected will throw an error if they add up to more than 4. The game will then use the default pattern.");
             api.RegisterClampedOption(ModManifest, "Custom North Area", "How far north the sprinkler should water.", () => myConfig.northArea, (int val) => myConfig.northArea = val, 0, 4);
