@@ -113,7 +113,7 @@ Basic Sprinkler Improved mod is distributed in the hope that it will be useful, 
 
 7. CHANGE LOG
 
-Version 2.1.0 (9/??/20)
+Version 2.1.0 (9/16/20)
 -Settings can now be changed in game using Generic Mod Config Menu.
 
 Version 2.0.0 (9/13/20)
